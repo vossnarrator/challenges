@@ -1,0 +1,12 @@
+### Terraform ###
+# Compiled files
+*.tfstate
+*.tfstate.backup
+*tfout
+*tfplan
+
+# Module directory
+.terraform/
+
+# System Files
+.DS_Store
