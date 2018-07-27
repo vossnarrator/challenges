@@ -1,0 +1,3 @@
+# Add additional python packages here
+boto3
+requests
