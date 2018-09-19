@@ -1,6 +1,57 @@
-
 # Tempus Data Engineer Challenge
-For this challenge, you will develop a simple [Apache Airflow](https://airflow.apache.org) data pipeline that fetches data from [News API](https://newsapi.org), transforms the data into a tabular structure, and stores the transformed data on [Amazon S3](https://aws.amazon.com/s3/).
+For this challenge,
+ you will develop a simple
+ [Apache Airflow](https://airflow.apache.org) data pipeline.
+
+## Challenge Summary
+Our data pipeline must fetch data from [News API](https://newsapi.org),
+ transform the data into a tabular structure,
+ and store the transformed data on [Amazon S3](https://aws.amazon.com/s3/).
+
+## Quickstart
+1. We recommend starting with a fresh virtualenv using Python 3.6 on a *nix system.
+    * Our docker versions are docker 17.12.0-ce and docker-compose 1.18.0.
+2. Run `make init` to download project dependencies.
+3. Run `make test` to make sure basic smoke tests are passing.
+4. Run `make run` with docker running to bring up airflow.
+    * The Airflow UI/Admin Console should now be visible on [http://localhost:8080](http://localhost:8080).
+    * There will be a DAG named `sample_dag`. You should be able to view logs from the [Task Instance Context Menu](https://airflow.readthedocs.io/en/latest/ui.html#task-instance-context-menu).
+5. Follow the requirements + rules of engagement below.
+
+## Requirements
+- [ ] Use Airflow to construct a new data pipeline (DAG) named 'tempus_challenge_dag'.
+- [ ] Data pipeline must be scheduled to run once a day.
+- [ ] Data pipeline will:
+  - [ ] Retrieve all English news sources.
+  - [ ] For each news source, retrieve the top headlines.
+    - [ ] Top headlines must be flattened into a CSV file. CSV Filename: `<pipeline_execution_date>_top_headlines.csv`
+    - [ ] Result CSV must be uploaded to the following s3 location `<s3_bucket>/<source_name>`
+- [ ] The solution must contain at least one test for your headline transformation.
+- [ ] The solution must be start-able via `make run`.
+- [ ] The solution must be pep-8 compliant.
+- [ ] Bonus: Build a separate pipeline that uses the following keywords instead of English news sources: Tempus Labs, Eric Lefkofsky, Cancer, Immunotherapy
+- [ ] Bonus: Write an integration test for any of the external services your solution connects to.
+
+
+## Rules of engagement
+* We suggest that you establish a four hour timebox to complete the challenge.
+* The solution must perform a Python transformation of the data;
+ feel free to add any open-source libraries you wish and add additional output files.
+* Please document changes required to make the solution resilient to
+ failure by taking the following actions:
+  * add developer-friendly requirements to functions
+  * add comments in the main function that list failures that the solution should
+  be designed to handle
+* Please run `make clean` and deliver your Python code via repo or zip ahead of the meeting.
+
+## Grading
+We will grade your solution with the following guidelines.
+ This list is ordered with highest-weighted factors at the top:
+1. **Functional correctness**: The solution meets all functional requirements,
+ including bonuses.
+2. **Code composition and style**: Code follows appropriate coding standards and pep-8 guidelines.
+3. **Communication**: The project includes a README and the code is well-commented.
+
 
 ## [Apache Airflow](https://airflow.apache.org)
 From the Apache Airflow documentation:
@@ -46,22 +97,3 @@ A simple REST API that can be used to retrieve breaking headlines and search for
 A simple cloud storage service run by Amazon Web Services (AWS). **An AWS account is needed to use AWS S3. Furthermore, AWS has a [free tier](https://aws.amazon.com/free/) that can be used for this challenge.**
 
 Amazon provides a Python SDK (**[boto](http://boto3.readthedocs.io/en/latest/guide/resources.html)**), that provides an easy to use API for interacting with AWS S3.
-
-## Requirements
-- [ ] Use Airflow to construct data pipeline
-- [ ] Data pipeline must be scheduled to run once a day
-- [ ] Data pipeline will:
-  - [ ] Retrieve all English news sources
-  - [ ] For each news source, retrieve the top headlines
-    - [ ] Top headlines must be flattened into a CSV file. CSV Filename: `<pipeline_execution_date>_top_headlines.csv`
-    - [ ] Result CSV must be uploaded to the following s3 location `<s3_bucket>/<source_name>`
-- [ ] Bonus: Build a separate pipeline that uses the following keywords instead of English news sources: Tempus Labs, Eric Lefkofsky, Cancer, Immunotherapy
-
-
-## Rules of engagement
-* We suggest that you establish a four hour timebox to complete the challenge.
-* The solution must perform a Python transformation of the data; feel free to add any open-source libraries you wish and add additional output files.
-* Please document changes required to make the solution resilient to failure by taking the following actions:
-  * add developer-friendly requirements to functions
-  * add comments in the main function that list failures that the solution should be designed to handle
-* Please deliver your Python code via repo or zip ahead of the meeting.
