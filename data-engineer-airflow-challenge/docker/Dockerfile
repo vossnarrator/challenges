@@ -4,7 +4,7 @@
 # BUILD: docker build --rm -t puckel/docker-airflow .
 # SOURCE: https://github.com/puckel/docker-airflow
 
-FROM python:3.6-slim
+FROM python:3.6-stretch
 MAINTAINER Puckel_
 
 # Never prompts the user for choices on installation/configuration of packages
@@ -12,7 +12,6 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 
 # Airflow
-ARG AIRFLOW_VERSION=1.9.0
 ARG AIRFLOW_HOME=/usr/local/airflow
 
 # Define en_US.
@@ -41,11 +40,9 @@ RUN set -ex \
         $buildDeps \
         python3-pip \
         python3-requests \
-        mysql-client \
-        mysql-server \
-        default-libmysqlclient-dev \
         apt-utils \
         curl \
+        make \
         rsync \
         netcat \
         locales \
@@ -59,8 +56,6 @@ RUN set -ex \
     && pip install pyOpenSSL \
     && pip install ndg-httpsclient \
     && pip install pyasn1 \
-    && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql]==$AIRFLOW_VERSION \
-    && pip install celery[redis]==4.0.2 \
     && apt-get purge --auto-remove -yqq $buildDeps \
     && apt-get clean \
     && rm -rf \
@@ -71,11 +66,19 @@ RUN set -ex \
         /usr/share/doc \
         /usr/share/doc-base
 
-COPY ./requirements.txt /tmp/requirements.txt
-RUN pip install -r /tmp/requirements.txt
+COPY ["Makefile", \
+      "requirements.txt", \
+      "requirements-test.txt", \
+      "requirements-setup.txt", \
+      "setup.py", \
+      "setup.cfg", \
+      "README.md", \
+      "/tmp/"]
 
-COPY script/entrypoint.sh /entrypoint.sh
-COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+RUN make -C /tmp/ init
+
+COPY ./docker/script/entrypoint.sh /entrypoint.sh
+COPY ./config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
 RUN chown -R airflow: ${AIRFLOW_HOME}
 

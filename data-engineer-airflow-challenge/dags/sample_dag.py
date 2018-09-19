@@ -3,26 +3,9 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 
-from utils.sleep import sleep
+import challenge as c
 
 from datetime import datetime, timedelta
-
-
-def print_context(**context):
-    """Print context provided to function."""
-    print('Context: {}'.format(context))
-
-
-def print_date(**context):
-    """Print date."""
-    print('Date: {}'.format(context['ds']))  # airflow provides ds var in context
-
-
-def hello_world(**context):
-    """Print `Hello, <name>!`."""
-    sleep()
-    print('Hello, {}!'.format(context['params']['name']))
-
 
 default_args = {
     'owner': 'airflow',
@@ -45,22 +28,23 @@ dag = DAG(
 
 print_context_task = PythonOperator(
     task_id='print_context',
-    provide_context=True,  # provide params and additional kwargs to python_callable
-    python_callable=print_context,
+    provide_context=True,
+    # provide params and additional kwargs to python_callable
+    python_callable=c.print_context,
     dag=dag
 )
 
 print_date_task = PythonOperator(
     task_id='print_date',
     provide_context=True,  # necessary to provide date to python_callable
-    python_callable=print_date,
+    python_callable=c.PrintExecutionDate.callable,
     dag=dag
 )
 
 hello_world_task = PythonOperator(
     task_id='hello_world',
     provide_context=True,  # necessary to provide params to python_callable
-    python_callable=hello_world,
+    python_callable=c.HelloWorld(),
     params={'name': 'Data Engineer'},
     dag=dag
 )
