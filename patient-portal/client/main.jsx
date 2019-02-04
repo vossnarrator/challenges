@@ -1,33 +1,33 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import pink from 'material-ui/colors/pink';
-import blue from 'material-ui/colors/blue';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { render } from "react-dom";
+import { Provider } from "react-redux";
+import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
+import pink from "material-ui/colors/pink";
+import blue from "material-ui/colors/blue";
 
 const theme = createMuiTheme({
   typography: {
-    fontFamily: 'Hind, sans-serif',
+    fontFamily: "Hind, sans-serif"
   },
   palette: {
     primary: pink,
-    secondary: blue,
-  },
+    secondary: blue
+  }
 });
 
-import store from './store';
+import store from "./store";
 
-import Login from './containers/Login';
-import DoctorHome from './containers/DoctorHome';
-import PatientHome from './containers/PatientHome';
-import Patient from './containers/DoctorPatient';
-import Home from './components/Home';
-import Navbar from './components/Navbar';
-import NewApptRequest from './components/NewApptRequest';
+import Login from "./containers/Login";
+import DoctorHome from "./containers/DoctorHome";
+import PatientHome from "./containers/PatientHome";
+import Patient from "./containers/DoctorPatient";
+import Home from "./components/Home";
+import Navbar from "./components/Navbar";
+import NewApptRequest from "./containers/NewApptRequest";
 
 // Load Global CSS
-import '../assets/stylesheets/style.scss';
+import "../assets/stylesheets/style.scss";
 
 render(
   <Provider store={store}>
@@ -47,5 +47,5 @@ render(
       </Router>
     </MuiThemeProvider>
   </Provider>,
-  document.getElementById('main') // eslint-disable-line
+  document.getElementById("main") // eslint-disable-line
 );

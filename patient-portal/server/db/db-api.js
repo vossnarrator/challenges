@@ -1,9 +1,9 @@
-import _ from 'lodash';
-import uuid from 'uuid/v4';
-import isvalid from 'isvalid';
-import db from './index';
-import Models from './models';
-import { MODELS } from './db-constants';
+import _ from "lodash";
+import uuid from "uuid/v4";
+import isvalid from "isvalid";
+import db from "./index";
+import Models from "./models";
+import { MODELS } from "./db-constants";
 
 function createApi(model) {
   return {
@@ -22,13 +22,20 @@ function createApi(model) {
     },
     update: async (id, data = {}) => {
       try {
-        const currentValue = db.get(model.name).find({ id }).value();
-        const validData = await isvalid({ ...currentValue, ...data }, model.schema);
+        const currentValue = db
+          .get(model.name)
+          .find({ id })
+          .value();
+        const validData = await isvalid(
+          { ...currentValue, ...data },
+          model.schema
+        );
+
         const result = db
           .get(model.name)
           .find({ id })
           .assign(validData)
-          .set('id', id)
+          .set("id", id)
           .write();
         if (_.isEmpty(result)) return { error: true };
         return result;
@@ -36,12 +43,15 @@ function createApi(model) {
         return { error };
       }
     },
-    destroy: (id) => {
-      const result = db.get(model.name).remove({ id }).write();
+    destroy: id => {
+      const result = db
+        .get(model.name)
+        .remove({ id })
+        .write();
       if (_.isEmpty(result)) return { error: true };
       return result;
     },
-    get: (param) => {
+    get: param => {
       if (_.isString(param) || _.isNumber(param)) {
         return db
           .get(model.name)
@@ -55,17 +65,15 @@ function createApi(model) {
           .value();
       }
       return db.get(model.name).value();
-    },
+    }
   };
 }
 
-const {
-  APPOINTMENT, ADDRESS, FILE, PATIENT, USER,
-} = MODELS;
+const { APPOINTMENT, ADDRESS, FILE, PATIENT, USER } = MODELS;
 export default {
   Appointment: createApi(Models[APPOINTMENT]),
   Address: createApi(Models[ADDRESS]),
   File: createApi(Models[FILE]),
   Patient: createApi(Models[PATIENT]),
-  User: createApi(Models[USER]),
+  User: createApi(Models[USER])
 };
