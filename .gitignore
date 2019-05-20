@@ -10,3 +10,7 @@
 
 # System Files
 .DS_Store
+
+venv
+.idea
+data-engineer-airflow-challenge/.pytest_cache
